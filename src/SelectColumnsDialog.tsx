@@ -2,10 +2,16 @@ import { Button, Dialog, DialogTitle, DialogContent, Box, FormControl, DialogAct
 import { useEffect, useState } from 'react';
 import { PERNAMENT, CHECKED, NOTCHECKED, ATTRIBUTES } from './Constants';
 
-function SelectColumnsButton({ 
-    checkedAttributes 
+function SelectColumnsButton({
+    isOpen,
+    checkedAttributes,
+    onSubmit,
+    onClose
 }:{ 
-    checkedAttributes: number[]
+    isOpen: boolean,
+    checkedAttributes: number[],
+    onSubmit: (updatedCheckedState: number[]) => void,
+    onClose: () => void
 }) {
 
     const [open, setOpen] = useState(false);
@@ -15,14 +21,13 @@ function SelectColumnsButton({
         setCheckedState(checkedAttributes);
     }, [checkedAttributes]);
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    useEffect(() => {
+        setOpen(isOpen);
+    }, [isOpen]);
 
-    const handleClose = (event: React.SyntheticEvent<unknown>, reason?: string) => {
-        if (reason !== 'backdropClick') {
-          setOpen(false);
-        }
+    const handleClose = (event: React.SyntheticEvent<unknown>) => {
+        setOpen(false);
+        onClose();
     };
 
     const handleChange = (position: number) => {
@@ -36,9 +41,11 @@ function SelectColumnsButton({
         setCheckedState(updatedCheckedState);
     };
 
+    const handleSubmit = (event: React.SyntheticEvent<unknown>) => {
+        onSubmit(checkedState);
+    }
+
     return (
-        <>
-        <Button onClick={handleClickOpen}>Select columns</Button>
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Select columns to show</DialogTitle>
             <DialogContent>
@@ -48,20 +55,20 @@ function SelectColumnsButton({
                         <FormGroup>
                             {ATTRIBUTES.map((attribute: string, index: number) => (                       
                                 checkedState[index] === PERNAMENT ? 
-                                    <FormControlLabel disabled
+                                    <FormControlLabel key={attribute} disabled
                                         control={
                                             <Checkbox checked={true} onChange={() => handleChange(index)} name={attribute} />
                                         }
                                         label={"t(" + attribute + ")"}
                                     /> : 
                                     checkedState[index] === CHECKED ?
-                                        <FormControlLabel
+                                        <FormControlLabel key={attribute}
                                             control={
                                                 <Checkbox checked={true} onChange={() => handleChange(index)} name={attribute} />
                                             }
                                             label={"t(" + attribute + ")"}
                                         /> :
-                                        <FormControlLabel
+                                        <FormControlLabel key={attribute}
                                             control={
                                                 <Checkbox checked={false} onChange={() => handleChange(index)} name={attribute} />
                                             }
@@ -75,10 +82,9 @@ function SelectColumnsButton({
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Ok</Button>
+                <Button onClick={handleSubmit}>Ok</Button>
             </DialogActions>
         </Dialog>
-        </>
     );
 }
 
