@@ -1,7 +1,9 @@
-export const QUERY = (limit: number) => (
+export const ITEMS_PER_PAGE = 20;
+
+export const QUERY = (page: number) => (
   `
   {
-    launchesPast(limit: ` + limit.toString() + `) {
+    launchesPast(limit: ` + ITEMS_PER_PAGE.toString() + `, offset: ` + (page*ITEMS_PER_PAGE).toString() + `) {
       mission_name
       details
       links {

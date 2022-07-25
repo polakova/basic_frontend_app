@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { 
+  useEffect, 
+  useState 
+} from 'react';
 import { useQuery } from 'urql';
 import { useTranslation } from "react-i18next";
+import { Waypoint } from 'react-waypoint';
 import { 
   Button,
   Box
  } from '@mui/material';
 import MissionTable from '../Components/MissionTable';
 import SelectColumnsDialog from '../Components/SelectColumnsDialog';
-import { MissionMetadata } from '../Definitions/MissionInterface';
+import { 
+  MissionMetadata, 
+  Mission 
+} from '../Definitions/MissionInterface';
 import { 
   MISSION_METADATA, 
-  QUERY 
+  QUERY
 } from '../Definitions/Constants';
 
 
@@ -18,15 +25,34 @@ function App() {
 
   const { t, i18n } = useTranslation();
   
-  const query = QUERY(10);
-  const [ result ] = useQuery({ query });
-  const { data, fetching, error } = result;
-  
+  const [ page, setPage ] = useState(0);
+  const [ query, setQuery ] = useState(QUERY(page));
   const [ metadata, setMetadata ] = useState(MISSION_METADATA);
   const [ isOpenDialog, setIsOpenDialog ] = useState(false);
+  const [ missionData, setMissionData ] = useState<Mission[]>([]);
+  var [ result ] = useQuery({ query });
+  const { data, fetching, error } = result;
+  
+  useEffect(()=> {
+    setPage(page + 1);
+  }, []);
 
-  if (fetching) return <div>Loading ... </div>;
-  if (error) return <div>Error {error.message}</div>;
+  useEffect(() => {
+    if (!fetching) {
+      setMissionData([...missionData, ...data.launchesPast]);
+    }
+  }, [data, fetching]);
+
+  const getData = () => {
+    setQuery(QUERY(page));
+    setPage(page + 1);
+  };
+
+  const loadMoreData = () => {
+    if (page > 0) {
+      getData();
+    }
+  };
 
   const onOpen = () => {
     setIsOpenDialog(true);
@@ -46,14 +72,15 @@ function App() {
   }
 
   return (
-    <Box component="div" style={{ padding: '40px 20%', margin: 'auto' }}>
+    <Box component="div" style={{ padding: '40px 10%', margin: 'auto' }}>
       <Button onClick={() => changeLanguage('sk')}>SK</Button>
       <Button onClick={() => changeLanguage('en')}>EN</Button>
       <Button onClick={onOpen}>{t('select_columns.button')}</Button>
       {isOpenDialog &&
         <SelectColumnsDialog isOpen={isOpenDialog} missionMetadata={metadata} onSubmit={onSubmit} onClose={onClose} />
       }
-      <MissionTable missionData={data.launchesPast} missionMetadata={metadata} />
+      <MissionTable missionData={missionData} missionMetadata={metadata} />
+      <Waypoint onEnter={loadMoreData}></Waypoint>
     </Box>
   );
 }
