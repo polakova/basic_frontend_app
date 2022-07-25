@@ -1,0 +1,20 @@
+{
+    "mission_info": {
+        "mission_name": "Mission name",
+        "details": "Details",
+        "links.video_link": "Link to video",
+        "launch_success": "Launch success",
+        "launch_date_local": "Launch date",
+        "launch_site.site_name_long": "Launch site name",
+        "rocket.rocket_name": "Rocket name",
+        "rocket.rocket_type": "Rocket type"
+    },
+    "select_columns": {
+        "button": "Select columns",
+        "dialog": {
+            "name": "Select columns to show",
+            "ok": "OK",
+            "cancel": "Cancel"
+        }
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "mission_info": {
+        "mission_name": "Názov misie",
+        "details": "Detaily",
+        "links.vide_link": "Odkaz na video",
+        "launch_success": "Úspešný štart",
+        "launch_date_local": "Dátum štartu",
+        "launch_site.site_name_long": "Názov štartovacej lokality",
+        "rocket.rocket_name": "Meno rakety",
+        "rocket.rocket_type": "Typ rakety"
+    },
+    "select_columns": {
+        "button": "Vybrať stĺpce",
+        "dialog": {
+            "name": "Vyberte stĺpce pre zobrazenie",
+            "ok": "OK",
+            "cancel": "Zrušiť"
+        }
+    }
+}

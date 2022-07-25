@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-
-import { createClient, Provider } from 'urql';
+import { 
+  createClient, 
+  Provider 
+} from 'urql';
+import App from './Components/App';
+import './Definitions/i18n';
 
 const client = createClient({
   url: 'https://api.spacex.land/graphql/'
