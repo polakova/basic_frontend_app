@@ -16,5 +16,10 @@
             "ok": "OK",
             "cancel": "Cancel"
         }
+    },
+    "detail": {
+        "dialog": {
+            "close": "Close"
+        }
     }
 }

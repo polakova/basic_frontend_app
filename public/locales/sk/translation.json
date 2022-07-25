@@ -16,5 +16,10 @@
             "ok": "OK",
             "cancel": "Zrušiť"
         }
+    },
+    "detail": {
+        "dialog": {
+            "close": "Zatvoriť"
+        }
     }
 }

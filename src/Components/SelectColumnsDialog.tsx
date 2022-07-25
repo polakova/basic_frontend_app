@@ -46,12 +46,7 @@ function SelectColumnsButton({
         setOpen(isOpen);
     }, [isOpen]);
 
-    useEffect(() => {
-        console.log(metadata);
-    }, [metadata]);
-
     const handleClose = (event: React.SyntheticEvent<unknown>) => {
-        setOpen(false);
         onClose();
     };
 

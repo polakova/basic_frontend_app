@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useQuery } from 'urql';
 import { useTranslation } from "react-i18next";
-import { Button } from '@mui/material';
+import { 
+  Button,
+  Box
+ } from '@mui/material';
 import MissionTable from '../Components/MissionTable';
 import SelectColumnsDialog from '../Components/SelectColumnsDialog';
 import { MissionMetadata } from '../Definitions/MissionInterface';
@@ -43,7 +46,7 @@ function App() {
   }
 
   return (
-    <div style={{ padding: '20px 20%', margin: 'auto' }}>
+    <Box component="div" style={{ padding: '40px 20%', margin: 'auto' }}>
       <Button onClick={() => changeLanguage('sk')}>SK</Button>
       <Button onClick={() => changeLanguage('en')}>EN</Button>
       <Button onClick={onOpen}>{t('select_columns.button')}</Button>
@@ -51,7 +54,7 @@ function App() {
         <SelectColumnsDialog isOpen={isOpenDialog} missionMetadata={metadata} onSubmit={onSubmit} onClose={onClose} />
       }
       <MissionTable missionData={data.launchesPast} missionMetadata={metadata} />
-    </div>
+    </Box>
   );
 }
 

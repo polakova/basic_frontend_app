@@ -20,6 +20,7 @@ import {
   Mission,
   MissionMetadata
 } from '../Definitions/MissionInterface';
+import DetailDialog from '../Components/DetailDialog';
 
 
 function MissionTable({
@@ -34,6 +35,8 @@ function MissionTable({
 
   const [ data, setData ] = useState<Mission[]>([]);
   const [ metadata, setMetadata ] = useState(MISSION_METADATA);
+  const [ isOpenDialog, setIsOpenDialog ] = useState(false);
+  const [ dialogData, setDialogData ] = useState<Mission>({});
 
   useEffect(() => {
     setData(missionData);
@@ -43,51 +46,67 @@ function MissionTable({
     setMetadata(missionMetadata);
   }, [missionMetadata]);
 
+  const handleSelectMission = (missionRow: Mission) => {
+    setIsOpenDialog(true);
+    setDialogData(missionRow);
+  };
+
+  const onDetailClose = () => {
+    setIsOpenDialog(false);
+  };
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            
-            {Object.keys(metadata).map((key: string) => (
-              
-              (metadata[key as keyof MissionMetadata].showable && 
-                metadata[key as keyof MissionMetadata].isShown &&
-                
-                <TableCell key={key}>
-                  {t("mission_info." + key)}
-                </TableCell>
-              )
-
-            ))}
-
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          
-          {data.map((row: Mission) => (
-            
-            <TableRow key={row["mission_name" as keyof Mission]?.toString()}>
+    <>
+      {isOpenDialog && 
+        <DetailDialog isOpen={isOpenDialog} missionData={dialogData} onClose={onDetailClose} />
+      }
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
               
               {Object.keys(metadata).map((key: string) => (
                 
                 (metadata[key as keyof MissionMetadata].showable && 
                   metadata[key as keyof MissionMetadata].isShown &&
                   
-                  <TableCell key={row["mission_name" as keyof Mission]?.toString() + key}>
-                    {_.get(row, key)?.toString()}
+                  <TableCell key={key}>
+                    {t("mission_info." + key)}
                   </TableCell>
                 )
 
               ))}
 
             </TableRow>
+          </TableHead>
+          <TableBody>
+            
+            {data.map((mission: Mission) => (
+              
+              <TableRow 
+                key={mission["mission_name" as keyof Mission]?.toString()}
+                onClick={() => handleSelectMission(mission)}>
+                
+                {Object.keys(metadata).map((key: string) => (
+                  
+                  (metadata[key as keyof MissionMetadata].showable && 
+                    metadata[key as keyof MissionMetadata].isShown &&
+                    
+                    <TableCell key={mission["mission_name" as keyof Mission]?.toString() + key}>
+                      {_.get(mission, key)?.toString()}
+                    </TableCell>
+                  )
 
-          ))}
+                ))}
 
-        </TableBody>
-      </Table>
-    </TableContainer>
+              </TableRow>
+
+            ))}
+
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 
