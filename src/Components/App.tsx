@@ -7,9 +7,11 @@ import { useTranslation } from "react-i18next";
 import { Waypoint } from 'react-waypoint';
 import { 
   Button,
-  Box
+  Box,
+  Stack
  } from '@mui/material';
 import MissionTable from '../Components/MissionTable';
+import LanguageButtons from '../Components/LanguageButtons';
 import SelectColumnsDialog from '../Components/SelectColumnsDialog';
 import { 
   MissionMetadata, 
@@ -23,7 +25,7 @@ import {
 
 function App() {
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   
   const [ page, setPage ] = useState(0);
   const [ query, setQuery ] = useState(QUERY(page));
@@ -67,15 +69,12 @@ function App() {
     setIsOpenDialog(false);
   }
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  }
-
   return (
     <Box component="div" style={{ padding: '40px 10%', margin: 'auto' }}>
-      <Button onClick={() => changeLanguage('sk')}>SK</Button>
-      <Button onClick={() => changeLanguage('en')}>EN</Button>
-      <Button onClick={onOpen}>{t('select_columns.button')}</Button>
+      <Stack justifyContent="flex-end" spacing={2} direction="row" pb={2}>
+        <Button onClick={onOpen}>{t('select_columns.button')}</Button>
+        <LanguageButtons />
+      </Stack>
       {isOpenDialog &&
         <SelectColumnsDialog isOpen={isOpenDialog} missionMetadata={metadata} onSubmit={onSubmit} onClose={onClose} />
       }
